@@ -30,4 +30,15 @@ public class JWTService {
                 .verify(token)
                 .getSubject();
     }
+
+    public boolean isValid(String token) {
+        try {
+            JWT.require(Algorithm.HMAC256(SECRET))
+                    .build()
+                    .verify(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

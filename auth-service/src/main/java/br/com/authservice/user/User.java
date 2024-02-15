@@ -13,6 +13,7 @@ public class User {
     private String email;
     private String password;
     private Role role;
+    private boolean active;
 
     public User() {
     }
@@ -38,5 +39,9 @@ public class User {
 
     public Role getRole() {
         return role;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

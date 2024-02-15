@@ -1,5 +1,6 @@
 package br.com.authservice.user;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,7 +14,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> getByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
