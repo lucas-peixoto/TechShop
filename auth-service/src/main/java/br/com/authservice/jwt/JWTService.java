@@ -13,12 +13,13 @@ public class JWTService {
 
     @Value("${jwt.secret}")
     private String SECRET;
-    private long EXPIRATION_TIME = 86_400_000; // 1 day
+
+    @Value("${jwt.expiration-time}")
+    private long EXPIRATION_TIME;
 
     public String createToken(User user) {
         return JWT.create()
                 .withSubject(user.getEmail())
-                .withClaim("role", user.getRole().name())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(Algorithm.HMAC256(SECRET));
     }
