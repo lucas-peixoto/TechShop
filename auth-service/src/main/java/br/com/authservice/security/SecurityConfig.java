@@ -30,7 +30,12 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(requests -> requests.requestMatchers("/login", "/verify").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(
+                        requests -> requests
+                                .requestMatchers("/login","/register", "/verify").permitAll()
+                                .requestMatchers("/register-admin").hasAuthority("ADMIN")
+                                .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

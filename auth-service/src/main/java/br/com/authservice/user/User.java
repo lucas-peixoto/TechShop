@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
     private boolean active;
 
@@ -23,6 +25,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.active = true;
     }
 
     public String getName() {
