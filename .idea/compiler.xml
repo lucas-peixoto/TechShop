@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="auth-service" />
         <module name="payment-service" />
+        <module name="product-shop" />
         <module name="registration-and-discovery-service" />
         <module name="gateway-service" />
         <module name="product-admin" />
@@ -20,6 +21,7 @@
       <module name="gateway-service" options="-parameters" />
       <module name="payment-service" options="-parameters" />
       <module name="product-admin" options="-parameters" />
+      <module name="product-shop" options="-parameters" />
       <module name="registration-and-discovery-service" options="-parameters" />
     </option>
   </component>
