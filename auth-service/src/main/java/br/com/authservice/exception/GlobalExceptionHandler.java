@@ -1,5 +1,6 @@
 package br.com.authservice.exception;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -28,4 +29,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionView> handleException(Exception e) {
         return ResponseEntity.internalServerError().body(new ExceptionView.ExceptionMessageView(e.getMessage()));
     }
+
+//    @ExceptionHandler(DuplicateKeyException.class)
+//    public ResponseEntity<ExceptionView> handleDuplicateKeyException(DuplicateKeyException e) {
+//        return ResponseEntity.badRequest().body(new ExceptionView.ExceptionMessageView(e.getMessage()));
+//    }
 }
