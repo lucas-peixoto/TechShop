@@ -1,12 +1,11 @@
 package br.com.productadmin.product;
 
-import br.com.productadmin.product.dto.UpdateProductDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import br.com.productadmin.category.Category;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -18,16 +17,20 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
-    private Double quantity;
+    private BigDecimal quantity;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Category> category;
 
     public Product() {
     }
 
-    public Product(String name, String description, BigDecimal price, Double quantity) {
+    public Product(String name, String description, BigDecimal price, BigDecimal quantity, List<Category> category) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
+        this.category = category;
     }
 
     public Long getId() {
@@ -46,14 +49,18 @@ public class Product {
         return price;
     }
 
-    public Double getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void update(UpdateProductDTO updateProductDTO) {
-        this.name = updateProductDTO.name();
-        this.description = updateProductDTO.description();
-        this.price = updateProductDTO.price();
-        this.quantity = updateProductDTO.quantity();
+    public List<Category> getCategories() {
+        return Collections.unmodifiableList(category);
+    }
+
+    public void update(String name, String description, BigDecimal price, List<Category> categories) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = categories;
     }
 }

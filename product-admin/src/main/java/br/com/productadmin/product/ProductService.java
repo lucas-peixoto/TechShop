@@ -1,9 +1,10 @@
 package br.com.productadmin.product;
 
-import br.com.productadmin.product.dto.NewProductDTO;
-import br.com.productadmin.product.dto.ProductView;
-import br.com.productadmin.product.dto.UpdateProductDTO;
-import jakarta.transaction.Transactional;
+import br.com.productadmin.category.Category;
+import br.com.productadmin.category.CategoryRepository;
+import br.com.productadmin.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,39 +12,38 @@ import java.util.List;
 @Service
 public class ProductService {
 
+    private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository) {
+        this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
     }
 
-    public ProductView createProduct(NewProductDTO newProductDTO) {
-        Product product = newProductDTO.toModel();
-        product = productRepository.save(product);
+    public Product create(CreateProductRequest createProductRequest) {
+        List<Category> categories = categoryRepository.findAllById(createProductRequest.categoriesIds());
+        Product product = new Product(createProductRequest.name(), createProductRequest.description(), createProductRequest.price(), createProductRequest.quantity(), categories);
 
-        return new ProductView(product);
+        return productRepository.save(product);
     }
 
-    public ProductView findProductById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
-
-        return new ProductView(product);
+    public Product findById(Long id) {
+        return productRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public List<ProductView> findAllProducts() {
-        List<Product> products = productRepository.findAll();
-
-        return products.stream().map(ProductView::new).toList();
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
-    @Transactional
-    public ProductView updateProduct(Long id, UpdateProductDTO updateProductDTO) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
-        product.update(updateProductDTO);
-        return null;
+    public Product update(Long id, UpdateProductRequest updateProductRequest) {
+        List<Category> categories = categoryRepository.findAllById(updateProductRequest.categoriesId());
+        Product product = findById(id);
+        product.update(updateProductRequest.name(), updateProductRequest.description(), updateProductRequest.price(), categories);
+
+        return productRepository.save(product);
     }
 
-    public void deleteProduct(Long id) {
+    public void delete(Long id) {
         productRepository.deleteById(id);
     }
 }

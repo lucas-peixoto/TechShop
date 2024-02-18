@@ -1,14 +1,12 @@
 package br.com.productadmin.product;
 
-import br.com.productadmin.product.dto.NewProductDTO;
-import br.com.productadmin.product.dto.ProductView;
-import br.com.productadmin.product.dto.UpdateProductDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 public class ProductController {
@@ -20,37 +18,37 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<ProductView> save(@RequestBody NewProductDTO newProductDTO) {
-        ProductView product = productService.createProduct(newProductDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(product.id()).toUri();
+    public ResponseEntity<ProductView> save(@RequestBody CreateProductRequest newProductRequest) {
+        Product product = productService.create(newProductRequest);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(product.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(product);
+        return ResponseEntity.created(uri).body(new ProductView(product));
     }
 
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductView> findById(@PathVariable("id") Long id) {
-        ProductView product = productService.findProductById(id);
+        Product product = productService.findById(id);
 
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(new ProductView(product));
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<ProductView>> findAll() {
-        List<ProductView> products = productService.findAllProducts();
+    public ResponseEntity<Page<ProductView>> findAll(Pageable pageable) {
+        Page<Product> products = productService.findAll(pageable);
 
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(products.map(ProductView::new));
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<ProductView> update(@PathVariable("id") Long id, @RequestBody UpdateProductDTO updateProductDTO) {
-        ProductView product = productService.updateProduct(id, updateProductDTO);
+    public ResponseEntity<ProductView> update(@PathVariable("id") Long id, @RequestBody UpdateProductRequest updateProductRequest) {
+        Product product = productService.update(id, updateProductRequest);
 
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(new ProductView(product));
     }
 
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") Long id) {
-        productService.deleteProduct(id);
+        productService.delete(id);
 
         return ResponseEntity.noContent().build();
     }
