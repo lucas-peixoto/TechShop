@@ -17,7 +17,7 @@ public class UserValidator {
         ValidationResult validationResult = new ValidationResult();
 
         if (userRepository.existsByEmail(userRegistrationRequest.email())) {
-            validationResult.addError("name", "User email '%s' already exists".formatted(userRegistrationRequest.name()));
+            validationResult.addError("email", "User email '%s' already exists".formatted(userRegistrationRequest.email()));
         }
 
         return validationResult;
