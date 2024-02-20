@@ -41,10 +41,15 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private void tryToAuthenticate(String authorizationHeader) {
         String token = authorizationHeader.substring(7);
-        String email = jwtService.getEmail(token);
-        User user = userService.getByEmail(email);
-        CustomUserDetails userDetails = new CustomUserDetails(user);
 
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+        try {
+            String email = jwtService.getEmail(token);
+            User user = userService.getByEmail(email);
+            CustomUserDetails userDetails = new CustomUserDetails(user);
+
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+        } catch (Exception e) {
+            // Do nothing
+        }
     }
 }
