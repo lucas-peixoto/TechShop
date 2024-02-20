@@ -1,6 +1,5 @@
 package br.com.authservice.security;
 
-import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +32,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         requests -> requests
-                                .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                                .requestMatchers("/login","/register", "/verify").permitAll()
+                                .requestMatchers("/login", "/register", "/verify").permitAll()
                                 .requestMatchers("/register-admin").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
