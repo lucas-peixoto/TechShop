@@ -14,13 +14,17 @@ public class ProductService {
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final ProductValidator productValidator;
 
-    public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository, ProductValidator productValidator) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.productValidator = productValidator;
     }
 
     public Product create(CreateProductRequest createProductRequest) {
+        productValidator.validateForCreation(createProductRequest).throwIfInvalid();
+
         List<Category> categories = categoryRepository.findAllById(createProductRequest.categoriesIds());
         Product product = new Product(createProductRequest.name(), createProductRequest.description(), createProductRequest.price(), createProductRequest.quantity(), categories);
 
@@ -36,7 +40,9 @@ public class ProductService {
     }
 
     public Product update(Long id, UpdateProductRequest updateProductRequest) {
-        List<Category> categories = categoryRepository.findAllById(updateProductRequest.categoriesId());
+        productValidator.validateForUpdate(id, updateProductRequest).throwIfInvalid();
+
+        List<Category> categories = categoryRepository.findAllById(updateProductRequest.categoriesIds());
         Product product = findById(id);
         product.update(updateProductRequest.name(), updateProductRequest.description(), updateProductRequest.price(), categories);
 

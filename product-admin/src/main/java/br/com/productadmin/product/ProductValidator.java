@@ -18,37 +18,37 @@ public class ProductValidator {
     }
 
     public ValidationResult validateForCreation(CreateProductRequest createProductRequest) {
-        Map<String, String> errors = new HashMap<>();
+        ValidationResult validationResult = new ValidationResult();
 
         if (productRepository.existsByName(createProductRequest.name())) {
-            errors.put("name", "Product name '%s' already exists".formatted(createProductRequest.name()));
+            validationResult.addError("name", "Product name '%s' already exists".formatted(createProductRequest.name()));
         }
 
-        validateProductCategories(createProductRequest.categoriesIds(), errors);
+        validateProductCategories(createProductRequest.categoriesIds(), validationResult);
 
-        return errors.isEmpty() ? new ValidationResult.Success() : new ValidationResult.FieldErrors(errors);
+        return validationResult;
     }
 
     public ValidationResult validateForUpdate(Long id, UpdateProductRequest updateProductRequest) {
-        Map<String, String> errors = new HashMap<>();
+        ValidationResult validationResult = new ValidationResult();
 
         if (productRepository.existsByNameAndIdNot(updateProductRequest.name(), id)) {
-            errors.put("name", "Product name '%s' already exists".formatted(updateProductRequest.name()));
+            validationResult.addError("name", "Product name '%s' already exists".formatted(updateProductRequest.name()));
         }
 
-        validateProductCategories(updateProductRequest.categoriesId(), errors);
+        validateProductCategories(updateProductRequest.categoriesIds(), validationResult);
 
-        return errors.isEmpty() ? new ValidationResult.Success() : new ValidationResult.FieldErrors(errors);
+        return validationResult;
     }
 
-    private void validateProductCategories(List<Long> categoriesIds, Map<String, String> errors) {
+    private void validateProductCategories(List<Long> categoriesIds, ValidationResult validationResult) {
         if (!categoryRepository.existsAllByIdIn(categoriesIds)) {
-            errors.put("categories", "Categories not found");
+            validationResult.addError("categoriesIds", "Categories not found");
         }
 
         Set<Long> categoriesIdsSet = new HashSet<>(categoriesIds);
         if (categoriesIdsSet.size() != categoriesIds.size()) {
-            errors.put("categories", "Repeated categories");
+            validationResult.addError("categoriesIds", "Repeated categories");
         }
     }
 }

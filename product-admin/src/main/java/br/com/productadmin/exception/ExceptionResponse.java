@@ -1,8 +1,8 @@
 package br.com.productadmin.exception;
 
-import java.util.Map;
+import java.util.List;
 
 public sealed interface ExceptionResponse {
-    record FieldErrors(Map<String, String> errors) implements ExceptionResponse {}
+    record ValidationFieldErrors(List<ValidationFieldError> errors) implements ExceptionResponse {}
     record ExceptionMessage(String error) implements ExceptionResponse {}
 }

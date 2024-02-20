@@ -1,29 +1,23 @@
 package br.com.productadmin.exception;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-public sealed interface ValidationResult {
+public class ValidationResult {
 
-    void throwIfInvalid();
+    private final List<ValidationFieldError> errors;
 
-    record FieldErrors(Map<String, String> errors) implements ValidationResult {
-        @Override
-        public void throwIfInvalid() {
-            throw new ValidationFieldsException(this);
-        }
+    public ValidationResult() {
+        this.errors = new ArrayList<>();
     }
 
-    record ErrorMessage(String error) implements ValidationResult {
-        @Override
-        public void throwIfInvalid() {
-            throw new ValidationMessageException(this);
-        }
+    public void addError(String field, String message) {
+        this.errors.add(new ValidationFieldError(field, message));
     }
 
-    record Success() implements ValidationResult {
-        @Override
-        public void throwIfInvalid() {
-            // Do nothing
+    public void throwIfInvalid() {
+        if (!errors.isEmpty()) {
+            throw new ValidationFieldsException(this.errors);
         }
     }
 }

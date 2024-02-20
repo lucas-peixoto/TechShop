@@ -3,8 +3,6 @@ package br.com.productadmin.category;
 import br.com.productadmin.exception.ValidationResult;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-
 @Component
 public class CategoryValidator {
 
@@ -15,22 +13,22 @@ public class CategoryValidator {
     }
 
     public ValidationResult validateForCreation(CreateCategoryRequest createCategoryRequest) {
-        Map<String, String> errors = new HashMap<>();
+        ValidationResult validationResult = new ValidationResult();
 
         if (categoryRepository.existsByName(createCategoryRequest.name())) {
-            errors.put("name", "Category name '%s' already exists".formatted(createCategoryRequest.name()));
+            validationResult.addError("name", "Category name '%s' already exists".formatted(createCategoryRequest.name()));
         }
 
-        return errors.isEmpty() ? new ValidationResult.Success() : new ValidationResult.FieldErrors(errors);
+        return validationResult;
     }
 
     public ValidationResult validateForUpdate(Long id, UpdateCategoryRequest updateCategoryRequest) {
-        Map<String, String> errors = new HashMap<>();
+        ValidationResult validationResult = new ValidationResult();
 
         if (categoryRepository.existsByNameAndIdNot(updateCategoryRequest.name(), id)) {
-            errors.put("name", "Category name '%s' already exists".formatted(updateCategoryRequest.name()));
+            validationResult.addError("name", "Category name '%s' already exists".formatted(updateCategoryRequest.name()));
         }
 
-        return errors.isEmpty() ? new ValidationResult.Success() : new ValidationResult.FieldErrors(errors);
+        return validationResult;
     }
 }

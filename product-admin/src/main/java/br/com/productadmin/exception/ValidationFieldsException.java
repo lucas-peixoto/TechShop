@@ -1,16 +1,16 @@
 package br.com.productadmin.exception;
 
-import java.util.Map;
+import java.util.List;
 
 public class ValidationFieldsException extends RuntimeException {
 
-    private ValidationResult.FieldErrors fieldErrors;
+    private List<ValidationFieldError> fieldErrors;
 
-    public ValidationFieldsException(ValidationResult.FieldErrors fieldErrors) {
+    public ValidationFieldsException(List<ValidationFieldError> fieldErrors) {
         this.fieldErrors = fieldErrors;
     }
 
-    public Map<String, String> getErrors() {
-        return fieldErrors.errors();
+    public List<ValidationFieldError> getFieldErrors() {
+        return fieldErrors;
     }
 }
