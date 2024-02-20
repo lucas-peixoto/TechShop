@@ -26,6 +26,4 @@ public class RegistrationController {
         User user = registrationService.register(request, Role.ADMIN);
         return ResponseEntity.ok(new UserRegistrationResponse(user));
     }
-
-
 }

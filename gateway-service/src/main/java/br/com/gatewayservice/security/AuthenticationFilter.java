@@ -21,7 +21,6 @@ public class AuthenticationFilter implements GatewayFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        System.out.println("Authenticating request");
         ServerHttpRequest request = exchange.getRequest();
 
         if (this.isAuthMissing(request)) {
@@ -44,7 +43,7 @@ public class AuthenticationFilter implements GatewayFilter {
     }
 
     private boolean isAuthMissing(ServerHttpRequest request) {
-        return getAuthHeader(request).filter(s -> s.startsWith("Bearer ")).isEmpty();
+        return getAuthHeader(request).isEmpty() || getAuthHeader(request).filter(s -> s.startsWith("Bearer ")).isEmpty();
     }
 
     private Optional<String> getAuthHeader(ServerHttpRequest request) {

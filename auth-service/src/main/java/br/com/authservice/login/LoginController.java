@@ -2,6 +2,7 @@ package br.com.authservice.login;
 
 import br.com.authservice.jwt.JWTService;
 import br.com.authservice.user.User;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserCredentials credentials) {
+    public ResponseEntity<String> login(@RequestBody @Valid UserCredentials credentials) {
         User user = loginService.login(credentials);
         String token = jwtService.createToken(user);
         return ResponseEntity.ok(token);
