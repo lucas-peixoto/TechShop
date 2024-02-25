@@ -1,5 +1,6 @@
 package br.com.productadmin.category;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CategoryController {
     }
 
     @PostMapping("/categories")
-    public ResponseEntity<CategoryView> create(CreateCategoryRequest createCategoryRequest) {
+    public ResponseEntity<CategoryView> create(@RequestBody @Valid CreateCategoryRequest createCategoryRequest) {
         Category category = categoryService.create(createCategoryRequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId()).toUri();
 
@@ -40,7 +41,7 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{id}")
-    public ResponseEntity<CategoryView> update(@PathVariable("id") Long id, @RequestBody UpdateCategoryRequest updateCategoryRequest) {
+    public ResponseEntity<CategoryView> update(@PathVariable("id") Long id, @RequestBody @Valid UpdateCategoryRequest updateCategoryRequest) {
         Category category = categoryService.update(id, updateCategoryRequest);
 
         return ResponseEntity.ok(new CategoryView(category));

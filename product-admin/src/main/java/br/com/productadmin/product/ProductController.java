@@ -1,5 +1,6 @@
 package br.com.productadmin.product;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<ProductView> save(@RequestBody CreateProductRequest newProductRequest) {
+    public ResponseEntity<ProductView> save(@RequestBody @Valid CreateProductRequest newProductRequest) {
         Product product = productService.create(newProductRequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(product.getId()).toUri();
 
@@ -39,8 +40,15 @@ public class ProductController {
         return ResponseEntity.ok(products.map(ProductView::new));
     }
 
+    @GetMapping("/products/category/{categoryId}")
+    public ResponseEntity<Page<ProductView>> findByCategory(@PathVariable("categoryId") Long categoryId, Pageable pageable) {
+        Page<Product> products = productService.findByCategory(categoryId, pageable);
+
+        return ResponseEntity.ok(products.map(ProductView::new));
+    }
+
     @PutMapping("/products/{id}")
-    public ResponseEntity<ProductView> update(@PathVariable("id") Long id, @RequestBody UpdateProductRequest updateProductRequest) {
+    public ResponseEntity<ProductView> update(@PathVariable("id") Long id, @RequestBody @Valid UpdateProductRequest updateProductRequest) {
         Product product = productService.update(id, updateProductRequest);
 
         return ResponseEntity.ok(new ProductView(product));

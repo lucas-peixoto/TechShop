@@ -1,5 +1,7 @@
 package br.com.productadmin.product;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -8,6 +10,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsByNameAndIdNot(String name, Long id);
 
     boolean existsByIdAndInventoryGreaterThanEqual(Long productId, int quantity);
+
+    Page<Product> findByCategoriesId(Long categoryId, Pageable pageable);
 
     @Modifying
     @Query("update Product p set p.inventory = p.inventory + ?2 where p.id = ?1")

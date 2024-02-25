@@ -52,4 +52,8 @@ public class ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
+
+    public Page<Product> findByCategory(Long categoryId, Pageable pageable) {
+        return productRepository.findByCategoriesId(categoryId, pageable);
+    }
 }
