@@ -26,7 +26,7 @@ public class ProductService {
         productValidator.validateForCreation(createProductRequest).throwIfInvalid();
 
         List<Category> categories = categoryRepository.findAllById(createProductRequest.categoriesIds());
-        Product product = new Product(createProductRequest.name(), createProductRequest.description(), createProductRequest.price(), createProductRequest.quantity(), categories);
+        Product product = new Product(createProductRequest.name(), createProductRequest.description(), createProductRequest.price(), createProductRequest.inventory(), categories);
 
         return productRepository.save(product);
     }

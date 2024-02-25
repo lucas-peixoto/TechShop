@@ -17,7 +17,7 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
-    private BigDecimal quantity;
+    private int inventory;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Category> category;
@@ -25,11 +25,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, BigDecimal price, BigDecimal quantity, List<Category> category) {
+    public Product(String name, String description, BigDecimal price, int inventory, List<Category> category) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.quantity = quantity;
+        this.inventory = inventory;
         this.category = category;
     }
 
@@ -49,8 +49,8 @@ public class Product {
         return price;
     }
 
-    public BigDecimal getQuantity() {
-        return quantity;
+    public int getInventory() {
+        return inventory;
     }
 
     public List<Category> getCategories() {
