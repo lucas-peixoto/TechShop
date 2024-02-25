@@ -5,7 +5,7 @@ import br.com.productadmin.category.CategoryView;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record ProductView(Long id, String name, String description, List<CategoryView> category, BigDecimal price,
+public record ProductView(Long id, String name, String description, List<CategoryView> categories, BigDecimal price,
                           int inventory) {
 
     public ProductView(Product product) {
