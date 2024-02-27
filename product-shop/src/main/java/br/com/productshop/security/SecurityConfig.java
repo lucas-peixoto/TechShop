@@ -19,7 +19,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        requests -> requests.anyRequest().permitAll()
+                        requests -> requests.requestMatchers("/cart/**").authenticated()
+                                .anyRequest().permitAll()
                 )
                 .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();

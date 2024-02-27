@@ -18,4 +18,8 @@ public class LoggedUser {
     public boolean isLogged() {
         return getLoggedUser().isPresent();
     }
+
+    public String getEmail() {
+        return getLoggedUser().map(User::getUsername).orElseThrow(() -> new IllegalStateException("User not found"));
+    }
 }
