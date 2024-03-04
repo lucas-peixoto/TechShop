@@ -11,4 +11,7 @@ public interface CartShopClient {
 
     @RequestMapping(method = RequestMethod.GET, path = "/cart")
     List<Cart> getCarts();
+
+    @RequestMapping(method = RequestMethod.GET, path = "/cart/items/{id}")
+    List<CartItem> getItemsByCartId();
 }
