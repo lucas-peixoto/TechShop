@@ -4,11 +4,16 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient("product-admin")
 public interface ProductAdminClient {
 
     @RequestMapping(method = RequestMethod.GET, path = "/products/{id}")
     Product getProductById(@PathVariable Long id);
+
+    @RequestMapping(method = RequestMethod.GET, path = "/products/findBy/{ids}")
+    List<Product> getProductsByIds(@PathVariable List<Long> ids);
 
     @RequestMapping(method = RequestMethod.GET, path = "/products")
     Page<Product> getProducts(@RequestParam("page") int page, @RequestParam("size") int size);

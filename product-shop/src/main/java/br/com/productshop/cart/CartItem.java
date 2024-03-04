@@ -2,6 +2,7 @@ package br.com.productshop.cart;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -32,6 +33,10 @@ public class CartItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal calculateTotalItems(BigDecimal price, Integer quantity) {
+        return price.multiply(BigDecimal.valueOf(quantity));
     }
 
     @Override

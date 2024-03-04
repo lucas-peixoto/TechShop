@@ -2,6 +2,7 @@ package br.com.productshop.cart;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
