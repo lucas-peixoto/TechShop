@@ -56,4 +56,8 @@ public class ProductService {
     public Page<Product> findByCategory(Long categoryId, Pageable pageable) {
         return productRepository.findByCategoriesId(categoryId, pageable);
     }
+
+    public List<Product> findAllByIds(List<Long> ids) {
+        return productRepository.findByIdIn(ids);
+    }
 }

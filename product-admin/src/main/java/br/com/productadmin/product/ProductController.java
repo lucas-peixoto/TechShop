@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -38,6 +39,13 @@ public class ProductController {
         Page<Product> products = productService.findAll(pageable);
 
         return ResponseEntity.ok(products.map(ProductView::new));
+    }
+
+    @GetMapping("/products/findBy/{ids}")
+    public ResponseEntity<List<ProductView>> findAllByIds(@PathVariable List<Long> ids) {
+        List<Product> products = productService.findAllByIds(ids);
+
+        return ResponseEntity.ok(products.stream().map(ProductView::new).toList());
     }
 
     @GetMapping("/products/category/{categoryId}")
