@@ -1,10 +1,8 @@
 package br.com.paymentservice.payment;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PaymentController {
@@ -23,7 +21,7 @@ public class PaymentController {
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<PaymentView> save(CreatePaymentRequest createPaymentRequest) {
+    public ResponseEntity<PaymentView> save(@RequestBody @Valid CreatePaymentRequest createPaymentRequest) {
         Payment payment = paymentService.create(createPaymentRequest);
         return ResponseEntity.ok(new PaymentView(payment));
     }
