@@ -30,6 +30,10 @@ public class GatewayConfig {
                         .filters(f -> f.stripPrefix(2).filter(authenticationFilter))
                         .uri("http://localhost:8084")
                 )
+                .route(r -> r.path("/api/payment/**")
+                        .filters(f -> f.stripPrefix(2).filter(authenticationFilter))
+                        .uri("http://localhost:8085")
+                )
                 .build();
     }
 }
