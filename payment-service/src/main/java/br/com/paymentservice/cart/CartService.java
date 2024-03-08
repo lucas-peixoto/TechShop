@@ -15,7 +15,7 @@ public class CartService {
     }
 
     public Cart getCartById(Long id) {
-        return cartShopClient.getCartId(id).orElseThrow(NotFoundException::new);
+        return cartShopClient.getCartId(id);
     }
 
     public BigDecimal getTotalCart(Long id) {

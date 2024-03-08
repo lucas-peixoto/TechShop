@@ -6,7 +6,6 @@ import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 public class PaymentService {
@@ -27,6 +26,6 @@ public class PaymentService {
         Cart cart = cartService.getCartById(createPaymentRequest.cartId());
         BigDecimal total = cartService.getTotalCart(cart.getId());
 
-        return new Payment(cart.getId(), total, createPaymentRequest.paymentMethod());
+        return paymentRepository.save(new Payment(cart.getId(), total, createPaymentRequest.paymentMethod()));
     }
 }
