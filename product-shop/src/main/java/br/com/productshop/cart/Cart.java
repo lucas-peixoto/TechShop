@@ -70,4 +70,10 @@ public class Cart {
             }
         }
     }
+
+    public BigDecimal getTotal() {
+        return items.stream()
+                .map(CartItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

@@ -1,9 +1,9 @@
 package br.com.productshop.cart;
 
+import br.com.productshop.exception.NotFoundException;
 import br.com.productshop.product.Product;
 import br.com.productshop.product.ProductService;
 import br.com.productshop.user.LoggedUser;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,11 +15,13 @@ import java.util.stream.Collectors;
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final CartValidator cartValidator;
     private final LoggedUser loggedUser;
     private final ProductService productService;
 
-    public CartService(CartRepository cartRepository, LoggedUser loggedUser, ProductService productService) {
+    public CartService(CartRepository cartRepository, CartValidator cartValidator, LoggedUser loggedUser, ProductService productService) {
         this.cartRepository = cartRepository;
+        this.cartValidator = cartValidator;
         this.loggedUser = loggedUser;
         this.productService = productService;
     }
@@ -27,7 +29,15 @@ public class CartService {
     public Cart addItems(List<CartItemRequest> cartItemRequests) {
         String ownerEmail = loggedUser.getEmail();
         Cart cart = cartRepository.findByOwnerEmail(ownerEmail).orElseGet(() -> new Cart(ownerEmail));
-        cart.addItems(cartItemRequests.stream().map(CartItemRequest::toModel).toList());
+        List<Product> products = productService.getProductsByIds(cartItemRequests.stream().map(CartItemRequest::productId).toList());
+
+        cartValidator.validateAddItems(cart, cartItemRequests, products).throwIfInvalid();
+
+        Map<Long, BigDecimal> productsPriceMap = products.stream().collect(Collectors.toMap(Product::getId, Product::getPrice));
+        List<CartItem> cartItems = cartItemRequests.stream()
+                .map(cartItemRequest -> new CartItem(cartItemRequest.productId(), productsPriceMap.get(cartItemRequest.productId()), cartItemRequest.quantity()))
+                .toList();
+        cart.addItems(cartItems);
 
         return cartRepository.save(cart);
     }
@@ -35,34 +45,17 @@ public class CartService {
     public Cart removeItems(List<CartItemRequest> cartItemRequests) {
         String ownerEmail = loggedUser.getEmail();
         Cart cart = cartRepository.findByOwnerEmail(ownerEmail).orElseGet(() -> new Cart(ownerEmail));
-        cart.removeItems(cartItemRequests.stream().map(CartItemRequest::toModel).toList());
+        List<CartItem> cartItems = cartItemRequests.stream().map(cartItemRequest -> new CartItem(cartItemRequest.productId(), BigDecimal.ZERO, cartItemRequest.quantity())).toList();
+        cart.removeItems(cartItems);
 
         return cartRepository.save(cart);
     }
 
-    public BigDecimal getTotalCart(Long id) {
-        Cart cart = cartRepository.findById(id).orElseThrow(NotFoundException::new);
-        List<CartItem> items = cart.getItems();
-        List<Long> productsId = items.stream().map(CartItem::getProductId).toList();
-        List<Product> products = productService.getProductsByIds(productsId);
-
-        return calculateTotalItems(products, items);
-    }
-
-    private BigDecimal calculateTotalItems(List<Product> products, List<CartItem> items) {
-        BigDecimal total = BigDecimal.ZERO;
-
-        Map<Long, BigDecimal> productPriceMap = products.stream().collect(Collectors.toMap(Product::getId, Product::getPrice));
-        for (CartItem item : items) {
-            BigDecimal price = productPriceMap.getOrDefault(item.getProductId(), BigDecimal.ZERO);
-            BigDecimal itemTotal = price.multiply(BigDecimal.valueOf(item.getQuantity()));
-            total = total.add(itemTotal);
-        }
-
-        return total;
-    }
-
     public Cart findById(Long id) {
         return cartRepository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    public BigDecimal getTotalCart(Long id) {
+        return findById(id).getTotal();
     }
 }

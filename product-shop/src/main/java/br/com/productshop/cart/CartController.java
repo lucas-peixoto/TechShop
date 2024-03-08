@@ -37,7 +37,7 @@ public class CartController {
     }
 
     @GetMapping("/cart/total/{id}")
-    public ResponseEntity<?> getTotal(@PathVariable Long id) {
+    public ResponseEntity<BigDecimal> getTotal(@PathVariable Long id) {
         BigDecimal totalCart = cartService.getTotalCart(id);
         return ResponseEntity.ok(totalCart);
     }
