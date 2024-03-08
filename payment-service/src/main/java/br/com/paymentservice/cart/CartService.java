@@ -1,6 +1,5 @@
 package br.com.paymentservice.cart;
 
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
