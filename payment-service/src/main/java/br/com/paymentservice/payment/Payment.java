@@ -1,6 +1,5 @@
 package br.com.paymentservice.payment;
 
-import br.com.paymentservice.paymentMethod.PaymentMethod;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

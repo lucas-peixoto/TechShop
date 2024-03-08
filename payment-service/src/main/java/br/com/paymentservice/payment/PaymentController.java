@@ -1,8 +1,8 @@
 package br.com.paymentservice.payment;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PaymentController {
@@ -13,8 +13,16 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/payment")
-    public ResponseEntity<?> findPayment() {
-        return ResponseEntity.ok("");
+    @GetMapping("/payment/{id}")
+    public ResponseEntity<PaymentView> findPaymentById(@PathVariable Long id) {
+        Payment payment = paymentService.findById(id);
+
+        return ResponseEntity.ok(new PaymentView(payment));
+    }
+
+    @PostMapping("/payment")
+    public ResponseEntity<PaymentView> save(@RequestBody @Valid CreatePaymentRequest createPaymentRequest) {
+        Payment payment = paymentService.create(createPaymentRequest);
+        return ResponseEntity.ok(new PaymentView(payment));
     }
 }

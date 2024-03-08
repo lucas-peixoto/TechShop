@@ -2,7 +2,7 @@ package br.com.paymentservice.cart;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Service
 public class CartService {
@@ -13,7 +13,12 @@ public class CartService {
         this.cartShopClient = cartShopClient;
     }
 
-    public List<Cart> getCarts() {
-        return cartShopClient.getCarts();
+    public Cart getCartById(Long id) {
+        return cartShopClient.getCartId(id);
     }
+
+    public BigDecimal getTotalCart(Long id) {
+        return cartShopClient.getTotal(id);
+    }
+
 }

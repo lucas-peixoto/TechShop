@@ -1,4 +1,4 @@
-package br.com.paymentservice.paymentMethod;
+package br.com.paymentservice.payment;
 
 public enum PaymentMethod {
     PIX,
