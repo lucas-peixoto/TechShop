@@ -27,6 +27,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(new ExceptionResponse.ValidationFieldErrors(e.getFieldErrors()));
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundException() {
+        return ResponseEntity.notFound().build();
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception e) {
         return ResponseEntity.internalServerError().body(new ExceptionResponse.ExceptionMessage(e.getMessage()));
