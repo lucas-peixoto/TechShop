@@ -12,6 +12,10 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
     private Long productId;
     private BigDecimal price;
     private Integer quantity;
@@ -23,6 +27,10 @@ public class CartItem {
         this.productId = productId;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public Long getProductId() {

@@ -14,7 +14,7 @@ public class Cart {
 
     private String ownerEmail;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItem> items = new ArrayList<>();
 
     public Cart() {
@@ -48,6 +48,7 @@ public class Cart {
         if (existingItem.isPresent()) {
             existingItem.get().setQuantity(existingItem.get().getQuantity() + item.getQuantity());
         } else {
+            item.setCart(this);
             items.add(item);
         }
     }
