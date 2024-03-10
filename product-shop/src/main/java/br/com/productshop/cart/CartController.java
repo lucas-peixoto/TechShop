@@ -30,6 +30,12 @@ public class CartController {
         return ResponseEntity.ok(new CartView(cart));
     }
 
+    @PostMapping("/cart/remove/all")
+    public ResponseEntity<Void> clear() {
+        cartService.clear();
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/cart/{id}")
     public ResponseEntity<CartView> findById(@PathVariable Long id) {
         Cart cart = cartService.findById(id);

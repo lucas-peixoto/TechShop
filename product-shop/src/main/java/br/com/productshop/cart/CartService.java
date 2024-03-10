@@ -5,6 +5,7 @@ import br.com.productshop.product.Product;
 import br.com.productshop.product.ProductService;
 import br.com.productshop.user.LoggedUser;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,6 +46,9 @@ public class CartService {
     public Cart removeItems(List<CartItemRequest> cartItemRequests) {
         String ownerEmail = loggedUser.getEmail();
         Cart cart = cartRepository.findByOwnerEmail(ownerEmail).orElseGet(() -> new Cart(ownerEmail));
+
+        cartValidator.validateRemoveItems(cart, cartItemRequests).throwIfInvalid();
+
         List<CartItem> cartItems = cartItemRequests.stream().map(cartItemRequest -> new CartItem(cartItemRequest.productId(), BigDecimal.ZERO, cartItemRequest.quantity())).toList();
         cart.removeItems(cartItems);
 
@@ -57,5 +61,10 @@ public class CartService {
 
     public BigDecimal getTotalCart(Long id) {
         return findById(id).getTotal();
+    }
+
+    @Transactional
+    public void clear() {
+        cartRepository.deleteByOwnerEmail(loggedUser.getEmail());
     }
 }
