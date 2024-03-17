@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         requests -> requests
-                                .requestMatchers("/login", "/register", "/verify").permitAll()
+                                .requestMatchers("/login", "/register", "/verify", "/api-docs", "api-docs.html", "/swagger-ui/index.html").permitAll()
                                 .requestMatchers("/register-admin").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 )
