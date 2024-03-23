@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 public class LoginController {
 
@@ -18,9 +20,10 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid UserCredentials credentials) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody @Valid UserCredentials credentials) {
         User user = loginService.login(credentials);
         String token = jwtService.createToken(user);
-        return ResponseEntity.ok(token);
+
+        return ResponseEntity.ok(Map.of("token", token));
     }
 }
