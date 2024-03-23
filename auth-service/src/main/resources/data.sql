@@ -1,1 +1,1 @@
-INSERT IGNORE INTO `auth`.`user` (`id`, `active`, `email`, `name`, `password`, `role`) VALUES (NULL, true, 'admin@admin.com', 'admin', 'admin', 'ADMIN');
+INSERT IGNORE INTO `auth`.`user` (`id`, `active`, `email`, `name`, `password`, `role`) VALUES (NULL, true, 'admin@admin.com', 'admin', '$2a$10$bZd6xUmZJdCx/.2qApCcq.Q3U8fxDEtTdBgIzQkm7b9ECM99vHHzq', 'ADMIN');
