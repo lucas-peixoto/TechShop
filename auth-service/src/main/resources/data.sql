@@ -1,0 +1,1 @@
+INSERT IGNORE INTO `auth`.`user` (`id`, `active`, `email`, `name`, `password`, `role`) VALUES (NULL, true, 'admin@admin.com', 'admin', 'admin', 'ADMIN');
