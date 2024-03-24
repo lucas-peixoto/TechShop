@@ -1,4 +1,4 @@
-package br.com.productshop;
+package br.com.productshop.config;
 
 
 import io.swagger.v3.oas.models.OpenAPI;
