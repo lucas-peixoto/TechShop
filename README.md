@@ -34,6 +34,7 @@ Recursos da API:
 
 Autenticação:
 - Utilize o token de autenticação para acessar recursos protegidos.
+
 Pagamentos:
 - Integração com diferentes métodos de pagamento.
 - Erros:
