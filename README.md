@@ -7,8 +7,10 @@ Para administradores:
 Gerenciamento de usuários:
 - Cadastro de administradores e clientes.
 - Autenticação com token.
+
 Gerenciamento de categorias:
 - Cadastro, atualização, exclusão e recuperação de categorias de produtos.
+
 Gerenciamento de produtos:
 - Cadastro, atualização, exclusão e recuperação de produtos.
 - Associação de produtos a categorias.
@@ -18,7 +20,8 @@ Para clientes:
 Pesquisa de produtos:
 - Listagem de produtos com paginação.
 - Busca por produtos por nome ou categoria.
-- 
+- Recuperação de detalhes de um produto.
+
 Carrinho de compras:
 - Adição, remoção e listagem de produtos no carrinho.
 - Cálculo do valor total do carrinho.
