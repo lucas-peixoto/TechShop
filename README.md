@@ -1,5 +1,5 @@
 # TechShop
-TechShop é uma API completa para gerenciamento de uma loja virtual, com funcionalidades para administradores, clientes e carrinho de compras.
+TechShop é uma API para gerenciamento de uma loja virtual, com funcionalidades para administradores, clientes e carrinho de compras.
 O Sistema tem como objetivo simular um e-commerce, onde é possível realizar a compra de produtos, adicionar produtos ao carrinho, realizar o pagamento e gerenciar produtos e categorias.
 
 Para administradores:
@@ -44,14 +44,17 @@ Respostas padronizadas para erros com códigos e mensagens descritivas.
 - Java 21
 - Spring Boot
 - Spring Framework
-- Spring Cloud
+  - Spring Data JPA
+  - Spring Security
+  - Spring Cloud
+      - Gateway
+      - Eureka
+      - OpenFeign
 - Swagger
-- Spring Security
 - JWT
 - Hibernate
 - MySQL
 - Docker
-- JUnit
 
 # Documentação API - TechShop
 
@@ -67,7 +70,7 @@ Respostas padronizadas para erros com códigos e mensagens descritivas.
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost:8081/api/auth/login" \
+curl -v -X POST --location "http://localhost:8081/api/auth/login" \
      -H "Content-Type: application/json" \
      -d '{
            "email" : "admin@admin.com",
@@ -83,17 +86,10 @@ curl -X POST --location "http://localhost:8081/api/auth/login" \
 | **método**  | POST                                          |
 Obs: Para cadastrar um usuário administrador, é necessário estar autenticado como administrador.
 
-```
-docker exec -it <container_id> bash
-sudo mysql -u root -p
-UPDATE techshop.user SET role = 'ADMIN' WHERE id = 1;
-```
-
-
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost:8081/api/auth/register-admin" \
+curl -v -X POST --location "http://localhost:8081/api/auth/register-admin" \
      -H "Content-Type: application/json" \
      -H 'Authorization: Bearer {token}' \
      -d '{
@@ -113,9 +109,8 @@ curl -X POST --location "http://localhost:8081/api/auth/register-admin" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost:8081/api/auth/register" \
+curl -v -X POST --location "http://localhost:8081/api/auth/register" \
      -H "Content-Type: application/json" \
-          -H 'Authorization: Bearer {token}' \
      -d '{
            "name" : "usuarioCliente",
            "email" : "usuarioCliente@email.com",
@@ -135,7 +130,7 @@ curl -X POST --location "http://localhost:8081/api/auth/register" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost:8081/api/admin/categories" \
+curl -v -X POST --location "http://localhost:8081/api/admin/categories" \
      -H "Content-Type: application/json" \
      -H 'Authorization: Bearer {token}' \
      -d '{
@@ -154,8 +149,8 @@ curl -X POST --location "http://localhost:8081/api/admin/categories" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/admin/categories" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/admin/categories" \
+     -H 'Authorization: Bearer {token}'
 ```
 
 ### 2.3 Recuperar categoria por id
@@ -168,8 +163,8 @@ curl -X GET --location "http://localhost:8081/api/admin/categories" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/admin/categories/1" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/admin/categories/1" \
+     -H 'Authorization: Bearer {token}'
 ```
 
 ### 2.4 Atualizar categoria por id
@@ -182,12 +177,12 @@ curl -X GET --location "http://localhost:8081/api/admin/categories/1" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X PUT --location "http://localhost:8081/api/admin/categories/0" \
+curl -v -X PUT --location "http://localhost:8081/api/admin/categories/1" \
     -H "Content-Type: application/json" \
     -H 'Authorization: Bearer {token}' \
     -d '{
           "name" : "Eletro",
-          "description" : ""
+          "description" : "Categoria de produtos eletro legais"
         }'
 ```
 
@@ -201,8 +196,8 @@ curl -X PUT --location "http://localhost:8081/api/admin/categories/0" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X DELETE --location "http://localhost:8081/api/admin/categories/1" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X DELETE --location "http://localhost:8081/api/admin/categories/1" \
+     -H 'Authorization: Bearer {token}'
 ```
 
 ## 3. Produto
@@ -217,15 +212,15 @@ curl -X DELETE --location "http://localhost:8081/api/admin/categories/1" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost:8081/api/admin/products" \
+curl -v -X POST --location "http://localhost:8081/api/admin/products" \
      -H "Content-Type: application/json" \
      -H 'Authorization: Bearer {token}' \
      -d '{
-           "name" : "",
-           "description" : "",
-           "price" : { },
-           "inventory" : 0,
-           "categoriesIds" : [ ]
+           "name" : "Celular",
+           "description" : "Celular top",
+           "price" : 15000.0,
+           "inventory" : 3,
+           "categoriesIds" : [ 1 ]
          }'
 ```
 
@@ -239,8 +234,7 @@ curl -X POST --location "http://localhost:8081/api/admin/products" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/admin/products" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/admin/products"
 ```
 
 ### 3.3 Recuperar produto por id
@@ -253,8 +247,7 @@ curl -X GET --location "http://localhost:8081/api/admin/products" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/admin/products/0" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/admin/products/1"
 ```
 
 ### 3.4 Atualizar produto por id
@@ -267,14 +260,14 @@ curl -X GET --location "http://localhost:8081/api/admin/products/0" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X PUT --location "http://localhost:8081/api/admin/products/0" \
+curl -v -X PUT --location "http://localhost:8081/api/admin/products/1" \
     -H "Content-Type: application/json" \
-         -H 'Authorization: Bearer {token}' \
+    -H 'Authorization: Bearer {token}' \
     -d '{
-          "name" : "",
-          "description" : "",
-          "price" : { },
-          "categoriesIds" : [ ]
+          "name" : "Celular Top",
+          "description" : "Celular top top",
+          "price" : 16000.0,
+          "categoriesIds" : [ 2 ]
         }'
 ```
 
@@ -288,8 +281,36 @@ curl -X PUT --location "http://localhost:8081/api/admin/products/0" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X DELETE --location "http://localhost:8081/api/admin/products/0" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X DELETE --location "http://localhost:8081/api/admin/products/1" \
+     -H 'Authorization: Bearer {token}'
+```
+
+### 3.6 Adicionar estoque
+
+| Informações |                                                         |
+|-------------|---------------------------------------------------------|
+| **recurso** | http://localhost:8081/api/admin/inventory/1/increment/5 |
+| **método**  | POST                                                    |
+
+**Exemplo de requisição**:
+
+```bash
+curl -v -X PUT --location "http://localhost:8081/api/admin/inventory/1/increment/5" \
+     -H 'Authorization: Bearer {token}'
+```
+
+### 3.7 Remover estoque
+
+| Informações |                                                         |
+|-------------|---------------------------------------------------------|
+| **recurso** | http://localhost:8081/api/admin/inventory/1/decrement/1 |
+| **método**  | POST                                                    |
+
+**Exemplo de requisição**:
+
+```bash
+curl -v -X PUT --location "http://localhost:8081/api/admin/inventory/1/decrement/3" \
+     -H 'Authorization: Bearer {token}'
 ```
 
 ## 4. Buscar produtos
@@ -304,8 +325,7 @@ curl -X DELETE --location "http://localhost:8081/api/admin/products/0" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/shop/products" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/shop/products"
 ```
 
 ### 4.2 Recuperar produto por id
@@ -318,8 +338,7 @@ curl -X GET --location "http://localhost:8081/api/shop/products" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/shop/products/0" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/shop/products/1"
 ```
 
 ### 4.3 Listar produtos por categoria
@@ -332,8 +351,7 @@ curl -X GET --location "http://localhost:8081/api/shop/products/0" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/shop/products/category/0" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/shop/products/category/1"
 ```
 
 ## 5. Carrinho
@@ -348,10 +366,15 @@ curl -X GET --location "http://localhost:8081/api/shop/products/category/0" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost:8081/api/shop/cart/add" \
+curl -v -X POST --location "http://localhost:8081/api/shop/cart/add" \
      -H "Content-Type: application/json" \
      -H 'Authorization: Bearer {token}' \
-     -d 'array'
+     -d '[
+          {
+            "productId" : 1,
+            "quantity" : 2
+          }
+     ]'
 ```
 
 ### 5.2 Remover produto do carrinho
@@ -364,10 +387,15 @@ curl -X POST --location "http://localhost:8081/api/shop/cart/add" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost:8081/api/shop/cart/remove" \
+curl -v -X POST --location "http://localhost:8081/api/shop/cart/remove" \
      -H "Content-Type: application/json" \
      -H 'Authorization: Bearer {token}' \
-     -d 'array'
+     -d '[
+          {
+            "productId" : 1,
+            "quantity" : 1
+          }
+     ]'
 ```
 
 ### 5.3 Remover todos os produtos do carrinho
@@ -380,7 +408,7 @@ curl -X POST --location "http://localhost:8081/api/shop/cart/remove" \
 **Exemplo de requisição**:
 
 ```bash
-curl -X POST --location "http://localhost/payment" \
+curl -v -X POST --location "http://localhost/payment" \
      -H "Content-Type: application/json" \
      -H 'Authorization: Bearer {token}' \
      -d '{
@@ -392,58 +420,64 @@ curl -X POST --location "http://localhost/payment" \
 
 ### 5.4 Listar produtos do carrinho
 
-| Informações |                                          |
-|-------------|------------------------------------------|
-| **recurso** | http://localhost:8081/api/shop/cart/{id} |
-| **método**  | GET                                      |
+| Informações |                                     |
+|-------------|-------------------------------------|
+| **recurso** | http://localhost:8081/api/shop/cart |
+| **método**  | GET                                 |
 
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost/payment/0" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/shop/cart" \
+     -H 'Authorization: Bearer {token}'
 ```
 
 ### 5.5 Valor total do carrinho
 
-| Informações |                                                |
-|-------------|------------------------------------------------|
-| **recurso** | http://localhost:8081/api/shop/cart/total/{id} |
-| **método**  | GET                                            |
+| Informações |                                           |
+|-------------|-------------------------------------------|
+| **recurso** | http://localhost:8081/api/shop/cart/total |
+| **método**  | GET                                       |
 
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/shop/cart/total/0" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/shop/cart/total" \
+     -H 'Authorization: Bearer {token}'
 ```
 
 ## 6. Pagamento
 
 ### 6.1 Realizar pagamento
 
-| Informações |                                        |
-|-------------|----------------------------------------|
-| **recurso** | http://localhost:8081/api/shop/payment |
-| **método**  | POST                                   |
+| Informações |                                           |
+|-------------|-------------------------------------------|
+| **recurso** | http://localhost:8081/api/payment/payment |
+| **método**  | POST                                      |
 
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/shop/payment" \
+curl -v -X POST --location "http://localhost:8081/api/payment/payment" \
+     -H "Content-Type: application/json" \
      -H 'Authorization: Bearer {token}' \
+     -d '{
+           "cartId" : 1,
+           "amount" : 3000.0,
+           "paymentMethod" : "PIX"
+     }'
 ```
 
 ### 6.2 Recuperar pagamento por id
 
-| Informações |                                             |
-|-------------|---------------------------------------------|
-| **recurso** | http://localhost:8081/api/shop/payment/{id} |
-| **método**  | GET                                         |
+| Informações |                                                |
+|-------------|------------------------------------------------|
+| **recurso** | http://localhost:8081/api/payment/payment/{id} |
+| **método**  | GET                                            |
 
 **Exemplo de requisição**:
 
 ```bash
-curl -X GET --location "http://localhost:8081/api/shop/payment/0" \
-     -H 'Authorization: Bearer {token}' \
+curl -v -X GET --location "http://localhost:8081/api/payment/payment/1" \
+     -H 'Authorization: Bearer {token}'
 ```
