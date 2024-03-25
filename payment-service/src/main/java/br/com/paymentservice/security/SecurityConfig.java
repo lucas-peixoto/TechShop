@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        requests -> requests.requestMatchers("/payment/**").authenticated())
+                        requests -> requests.anyRequest().authenticated())
                 .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
