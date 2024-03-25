@@ -18,9 +18,11 @@ Para clientes:
 Pesquisa de produtos:
 - Listagem de produtos com paginação.
 - Busca por produtos por nome ou categoria.
+- 
 Carrinho de compras:
 - Adição, remoção e listagem de produtos no carrinho.
 - Cálculo do valor total do carrinho.
+
 Pagamento:
 - Realização de pagamentos com diferentes métodos.
 - Consulta de pagamentos realizados.
