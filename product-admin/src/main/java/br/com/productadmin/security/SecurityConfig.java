@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        requests -> requests.requestMatchers(HttpMethod.GET, "/products", "/products/{id}", "/products/category/{categoryId}").permitAll()
+                        requests -> requests.requestMatchers(HttpMethod.GET, "/products", "/products/{id}", "/products/findBy/*", "/products/category/{categoryId}").permitAll()
                                 .anyRequest().hasAuthority("ADMIN")
                 )
                 .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

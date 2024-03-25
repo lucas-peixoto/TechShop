@@ -18,7 +18,7 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
-    private int inventory;
+    private Integer inventory;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Category> category;
@@ -50,7 +50,7 @@ public class Product {
         return price;
     }
 
-    public int getInventory() {
+    public Integer getInventory() {
         return inventory;
     }
 

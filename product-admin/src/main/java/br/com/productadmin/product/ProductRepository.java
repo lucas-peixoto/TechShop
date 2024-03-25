@@ -15,7 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     boolean existsByIdAndInventoryGreaterThanEqual(Long productId, int quantity);
 
-    Page<Product> findByCategoriesId(Long categoryId, Pageable pageable);
+    Page<Product> findByCategoryId(Long categoryId, Pageable pageable);
 
     @Modifying
     @Query("update Product p set p.inventory = p.inventory + ?2 where p.id = ?1")

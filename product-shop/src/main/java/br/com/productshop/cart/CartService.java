@@ -1,6 +1,5 @@
 package br.com.productshop.cart;
 
-import br.com.productshop.exception.NotFoundException;
 import br.com.productshop.product.Product;
 import br.com.productshop.product.ProductService;
 import br.com.productshop.user.LoggedUser;
@@ -55,12 +54,13 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    public Cart findById(Long id) {
-        return cartRepository.findById(id).orElseThrow(NotFoundException::new);
+    public Cart findByOwner() {
+        String ownerEmail = loggedUser.getEmail();
+        return cartRepository.findByOwnerEmail(ownerEmail).orElseGet(() -> new Cart(ownerEmail));
     }
 
-    public BigDecimal getTotalCart(Long id) {
-        return findById(id).getTotal();
+    public BigDecimal getTotalCart() {
+        return findByOwner().getTotal();
     }
 
     @Transactional

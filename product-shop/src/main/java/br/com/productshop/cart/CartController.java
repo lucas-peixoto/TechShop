@@ -36,15 +36,15 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/cart/{id}")
-    public ResponseEntity<CartView> findById(@PathVariable Long id) {
-        Cart cart = cartService.findById(id);
+    @GetMapping("/cart")
+    public ResponseEntity<CartView> findById() {
+        Cart cart = cartService.findByOwner();
         return ResponseEntity.ok(new CartView(cart));
     }
 
-    @GetMapping("/cart/total/{id}")
-    public ResponseEntity<BigDecimal> getTotal(@PathVariable Long id) {
-        BigDecimal totalCart = cartService.getTotalCart(id);
+    @GetMapping("/cart/total")
+    public ResponseEntity<BigDecimal> getTotal() {
+        BigDecimal totalCart = cartService.getTotalCart();
         return ResponseEntity.ok(totalCart);
     }
 }
